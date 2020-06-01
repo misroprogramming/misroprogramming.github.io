@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Misro Programming - Post</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Misro Programming</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="article-1-rake.html">New Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/rake-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>RAKE, algoritma sederhana untuk ektraksi kata kunci</h1>
+            <h2 class="subheading">Mengenal salah satu teknik NLP beserta perhitungan matematisnya</h2>
+            <span class="meta">Posted by
+              <a href="#">Rizkhita</a>
+              on April 24, 2020</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <p class="text-info"><em>Hello guysss!! First  article dari misro release, checkidhott !</em></p>
+          <p>Keyword Extraction merupakan teknik NLP (Natural Languange Processing) yang digunakan untuk mengekstrak kata kunci dari suatu dokumen secara otomatis. Keyword Extraction dapat diimplementasikan pada aplikasi-aplikasi seperti search engine, text summarizer ataupun chatbot.</p>
+
+          <p>Saat kita menginput kalimat ”Cara Membuat Misro dari Ubi” pada search engine, munculah hasil pencarian seperti 
+          <br>”Resep Cara Membuat Misro Khas Bandung yang Enak dan Murah”,
+          <br>”Resep Misro Singkong Ubi Manis” dan
+          <br>”Cara Membuat Bola-Bola Ubi Gula Merah”.</p>
+
+        <!--   <blockquote class="blockquote">
+          </blockquote> -->
+
+          <p>Amazingnya, hasil pencarian diatas memiliki topik yang sama, meskipun struktur kalimatnya tidak sama persis dengan kalimat yang diinputkan ke mesin pencari.</p>
+
+
+          <p><em>Bagaimana mesin pencari dapat melakukan hal demikian?</em>
+          <br>Salah satunya, dengan mengetahui kata kunci sebagai intent dari user's input menggunakan keyword extraction.</p>
+
+          <p>Tedapat beberapa algoritma keyword extraction, satu diantaranya adalah  RAKE yang akan kita bahas di artikel kali ini.</p>
+
+          <p><b>RAKE atau Rapid Automatic Keyword Extraction</b> merupakan algoritma dengan pendekatan unsupervised learning. Dalam proses ekstraksi keywords, RAKE menggunakan stoplist untuk mendapatkan list dari candidate keywords dari sebuah dokumen. Kemudian skor dari candidate keywords dihitung menggunakan perankingan berbasis graf.</p>
+          <p>Mungkin belum begitu kebayang, jadi kita coba gambarkan step by step keyword extraction menggunakan algoritma RAKE.</p>
+
+          <h2 class="section-heading">How it's works?</h2>
+
+          <p>Let's take an example dengan teks , 
+          <br>”Bagaimana membuat misro khas Bandung dari ubi jalar? Resep dari Bandung”</p>
+
+          <!-- <blockquote class="blockquote">
+          Pertama, kita lakukan text preprocessing berupa tokenizing dan case folding
+          </blockquote> -->
+
+          <p><b>Pertama,</b> kita lakukan <a href="">text preprocessing</a> berupa tokenizing dan case folding seperti berikut</p>
+
+
+          <p>
+
+            <table class="table-responsive">
+            <span class="caption text-muted">Tabel Text Preprocessing</span>
+            <thead class="table-success">
+              <tr>
+                <th colspan="4" style="text-align:center;">Setelah Tokenizing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" style="text-align:center;">
+                ‘Bagaimana’, ‘membuat’, ‘misro’, ‘khas’, ‘Bandung’, ‘dari’, ‘ubi’, ‘jalar’, ‘?’, ‘Resep’, ‘dari’, ‘Bandung’</td>
+              </tr>
+              <tr class="table-success">
+            <!--     <th colspan="4" style="text-align:center;">Setelah Tokenizing</th> -->
+            <th colspan="4" style="text-align:center;">Setelah Case Folding</th>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align:center;">‘bagaimana’, ‘membuat’, ‘misro’, ‘khas’, ‘bandung’, ‘dari’, ‘ubi’, ‘jalar’, ‘?’, ‘resep’, ‘dari’, ‘bandung’</td>
+              </tr>
+            </tbody>
+            </table>
+        <br></p>
+
+          
+
+          <p><b>Kedua,</b> hasil preprocessing diatas dibagi menjadi urutan kata-kata yang dipisahkan dengan delimiters (tanda seperti koma (,), titik (.), dsb) dan stopword sehingga didapatkan candidate keywords seperti pada tabel dibawah ini</p>
+
+          <p>
+          <div class="table table-responsive">
+            <table class="table table-stripped">
+              <span class="caption text-muted">Tabel Pengambilan Keywords</span>
+            <thead class=" table-success">
+              <tr>
+                <th>Default Sentence</th>
+                <th>Split by Delimeters & Stopwords</th>
+                <th>Candidate Keywords</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table">
+                <td scope="row" class="text-warning">bagaimana</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td scope="row" class="text-warning">membuat</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td scope="row">misro</td>
+                <td colspan="2">misro</td>
+              </tr>
+              <tr>
+                <td scope="row">khas</td>
+                <td colspan="2">khas</td>
+              </tr>
+              <tr>
+                <td scope="row">bandung</td>
+                <td>bandung</td>
+                <td>misro khas bandung</td>
+              </tr>
+              <tr>
+                <td scope="row" class="text-warning">dari</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td scope="row">ubi</td>
+                <td colspan="2">ubi</td>
+              </tr>
+              <tr>
+                <td scope="row">jalar</td>
+                <td>jalar</td>
+                <td>ubi jalar</td>
+              </tr>
+              <tr>
+                <td scope="row" class="text-info">?</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td scope="row">resep</td>
+                <td>resep</td>
+                <td>resep</td>
+              </tr>
+              <tr>
+                <td scope="row" class="text-warning">dari</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td scope="row">bandung</td>
+                <td>bandung</td>
+                <td>bandung</td>
+              </tr>
+              <tr>  
+                <td scope="row" ></td>
+                <td colspan="2"></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </p>
+
+        <p>Dari tabel diatas, kita sudah mendapatkan 4 candidate keywords yaitu “misro khas bandung”, “ubi jalar”, “bandung” dan “resep”. </p>
+
+        <p><b>Ketiga,</b> RAKE tidak hanya mengekstrak keywords, tetapi menghitung pula score atau nilai dari setiap keywords. RAKE menghitung keywords dengan mengambil rasio derajat frekuensi dari kata-kata. Tahap pertama untuk menghitung derajat frekuensi adalah dengan membuat co-occurrence graph (graf kemunculan bersama). Co-occurence graph sama dengan matriks TF-IDF dengan menghitung jumlah munculnya setiap kata dalam frasa. Berikut co-occurrence graph dari keywords yang sudah didapatkan</p>
+
+          <p>
+            <div class="table table-responsive">
+            <table class="table table-bordered">
+              <span class="caption text-muted">Tabel Co-occurence Graph</span>
+            <thead class="table-success text-center">
+              <tr>
+                <th></th>
+                <th>misro</th>
+                <th>khas</th>
+                <th>bandung</th>
+                <th>ubi</th>
+                <th>jalar</th>
+                <th>resep</th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <tr>
+                <th class="table-success">misro</th>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th class="table-success">khas</th>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th class="table-success">bandung</th>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th class="table-success">ubi</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1</td>
+                <td>1</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th class="table-success">jalar</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1</td>
+                <td>1</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th class="table-success">resep</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          </p>
+
+<p>Untuk lebih memahami tabel diatas, kita coba ambil sampel dari keywords awal yaitu “misro”, “khas”, “bandung”. (“Misro – khas”) atau (“khas”) atau (“misro”) = 1,  karena “misro“ dan “khas“ muncul bersama sebanyak 1 kali diantara semua keywords. Logika yang sama juga teraplikasikan pada setiap kata lainnya pada tabel diatas.
+Selanjutnya untuk menghitung score, kita dapat menghitung 2 hal terlebih dahulu untuk setiap kata yang ada pada tabel, yaitu :</p>
+
+<p><b>1. Word Frequency (freq(w))</b><br>
+Perhitungan word frequency merupakan perhitungan dari berapa kali kata tertentu muncul di antara semua keywords yang ada. Sebagai contoh “bandung”, maka<br> 
+freq(bandung) = 2 (nilai dari kolom “bandung” pada tabel co-occurence graph)
+</p>
+<p><b>2. Word Degree (deg(w))</b><br>
+Perhitungan word degree merupakan jumlah nilai dari baris suatu kata tertentu pada co-occurrence graph. Sebagai contoh “bandung”, maka<br> 
+deg(bandung) = 1+1+2 = 4 (nilai dari baris “bandung” pada tabel co-occurence graph)</p>
+
+<p>Kemudian untuk menghitung keywords score, dapat digunakan rumus berikut ini :
+<p style="text-align: center;"><b>Keyword score = (deg(w) / freq(w)) </b></p>
+Hasil perhitungan deg(w) dan freq(w) masing-masing candidate keyword adalah sebagai berikut </p> 
+
+          <p>
+            <div class="table table-responsive">
+            <table class="table table-bordered">
+              <span class="caption text-muted">Tabel Keyword Score</span>
+            <thead class="text-center">
+              <tr>
+                <th class="dark"></th>
+                <th class="table-danger">misro</th>
+                <th class="table-warning">khas</th>
+                <th class="table-info">bandung</th>
+                <th class="table-success">ubi</th>
+                <th class="table-danger">jalar</th>
+                <th class="table-warning">resep</th>
+                <!-- <th class="table-danger">bandung</th> -->
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <tr>
+                <th class="table-dark">deg(w)</th>
+                <td>3</td>
+                <td>3</td>
+                <td>4</td>
+                <td>2</td>
+                <td>2</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th class="table-dark">freq(w)</th>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th class="table-dark">keyword score</th>
+                <td>3</td>
+                <td>3</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>1</td>
+              </tr>
+              <!-- <tr>
+                <th class="table-warning">ubi</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr> -->
+              
+            </tbody>
+          </table>
+          </div>
+          </p>
+
+          <p>
+          <b>Last, </b>Kita dapat mengetahui score dari setiap candidate keyword. Dimana “misro khas bandung” dengan score tertinggi yaitu 8 (dari 3+3+2), “ubi jalar” dengan score 4, “resep” dengan score 1 dan “bandung” dengan score 2.
+          </p>
+
+          <p><br>
+          <a href="#">
+            <img class="img-fluid" src="img/1-rake.png" alt="">
+          </a>
+          <span class="caption text-muted">Score dari Candidate Keywords</span>
+          </p>
+          <p>So, itulah sekilas tentang algoritma Rapid Automatic Keyword Extraction beserta perhitungan matematisnya. Di artikel selanjutnya kita bakal share cara mengimplementasikan algoritma RAKE dalam sebuah program.</p>
+
+          <p class="text-info"><em>Makasih udah baca artikelnya sampai beres yaa, see you guys !!</em></p>
+
+
+
+
+ <!-- --------------------------------------->
+
+<!-- for linked article -->
+          <p>Source :
+            <a href="https://www.researchgate.net/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents">https://www.researchgate.net/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents</a>
+          </p>
+
+        <!--     https://www.researchgate.net/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents -->
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+    <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <!-- https://medium.com/@kikirizkhita -->
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-medium fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.linkedin.com/in/rizkhita/">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-linkedin-in fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://github.com/rizkhita">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; Misro Programming 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
