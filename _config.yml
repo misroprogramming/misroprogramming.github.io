@@ -1,5 +1,0 @@
-theme: jekyll-theme-cayman
-
-languages: ['ja', 'ko', 'en']
-default_lang: 'ja'
-parallel_localization: false
